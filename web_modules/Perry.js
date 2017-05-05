@@ -28,8 +28,6 @@ class Perry {
     };
     
     static processNodes(jqueryNode) {
-        console.log("PerryGlobals.tags.perryTemplateAttribute");
-        
         var perryTemplateTagSelector = "[" + PerryGlobals.tags.perryTemplateAttribute + "]";
         
         jqueryNode.find(perryTemplateTagSelector).each( function(i) {
@@ -41,6 +39,28 @@ class Perry {
     
     static processNode(jqueryNode) {
         console.log("Perry: Processing node: " + jqueryNode.attr("id"));
+        
+        var perryNode = { 
+            id: jqueryNode.attr("id"), 
+            template: {
+                url: null
+            },
+            data: {
+                url: null
+            }
+        };
+
+        // get the template
+        perryNode.template.url = jqueryNode.attr(PerryGlobals.tags.perryTemplateAttribute);
+        perryNode.data.url = jqueryNode.attr(PerryGlobals.tags.perryDataAttribute);
+
+        if (perryNode.template.url === undefined) {
+            console.error("Perry: " + perryNode.id + ": template url is undefined. Stopping");
+            return;
+        }
+
+        console.log("Perry: template: " + perryNode.template.url);
+        console.log("Perry: data: " + perryNode.data.url);
     };
 }
 
