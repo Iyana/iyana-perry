@@ -1,5 +1,5 @@
 {
-  "name": "iyana-perry-node",
+  "name": "iyana-perry",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
@@ -11,7 +11,7 @@
   "dependencies": {
     "express": "^4.15.2",
     "handlebars": "^4.0.7",
-    "jquery": "^3.2.1",
+    "jquery": "^3.2.1"
   },
   "devDependencies": {
     "webpack": "^2.4.1"
