@@ -16,6 +16,7 @@
 
 import $ from 'jquery';
 import PerryGlobals from 'PerryGlobals';
+import Handlebars from 'Handlebars';
 
 class Perry {
     
@@ -42,6 +43,7 @@ class Perry {
         
         var perryNode = { 
             id: "#" + jqueryNode.attr("id"), 
+            jqueryNode: jqueryNode,
             template: {
                 url: null,
                 loaded: false,
@@ -107,6 +109,23 @@ class Perry {
         
         if ((node.data.loaded) && (node.template.loaded)) {
             console.log("Perry: " + node.id + " : Merge started");
+            
+            // compile the template
+            var compiledTemplate = Handlebars.compile(node.template.data);
+            var html = compiledTemplate(node.data.data);
+            
+            // convert into a set of DOM nodes
+            // Do not use $(html) directly as it cannot parse arbitrary html properly
+            var domNodes = $.parseHTML(html);
+        
+            // if it is the body tag, change the inner html
+            // if it is anything else, replace it
+            if (node.jqueryNode.prop("tagName") === "BODY") {
+                node.jqueryNode.html(domNodes);
+            } else {
+                node.jqueryNode.replaceWith(domNodes);
+            }
+            
         } 
         
         
