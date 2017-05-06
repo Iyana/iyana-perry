@@ -38,30 +38,80 @@ class Perry {
     };
     
     static processNode(jqueryNode) {
-        console.log("Perry: Processing node: " + jqueryNode.attr("id"));
+        console.log("Perry: Processing node: #" + jqueryNode.attr("id"));
         
         var perryNode = { 
-            id: jqueryNode.attr("id"), 
+            id: "#" + jqueryNode.attr("id"), 
             template: {
-                url: null
+                url: null,
+                loaded: false,
+                data: null
             },
             data: {
-                url: null
+                url: null,
+                loaded: false,
+                data: null
             }
         };
 
-        // get the template
+        // get the template and data
         perryNode.template.url = jqueryNode.attr(PerryGlobals.tags.perryTemplateAttribute);
         perryNode.data.url = jqueryNode.attr(PerryGlobals.tags.perryDataAttribute);
 
         if (perryNode.template.url === undefined) {
-            console.error("Perry: " + perryNode.id + ": template url is undefined. Stopping");
+            console.warn("Perry: " + perryNode.id + ": template url is undefined. Node not processed.");
             return;
         }
+        console.log("Perry: " + perryNode.id + ": template: " + perryNode.template.url);
+        
+        if (perryNode.data.url === undefined) {
+            console.warn("Perry: " + perryNode.id + ": data url is undefined. Node not processed.");
+            return;
+        }
+        console.log("Perry: " + perryNode.id + ": data: " + perryNode.data.url);
 
-        console.log("Perry: template: " + perryNode.template.url);
-        console.log("Perry: data: " + perryNode.data.url);
+        // all params ok - lets load em up
+        Perry.load(perryNode.template, perryNode);
+        Perry.load(perryNode.data, perryNode);
     };
+    
+    static load(dataNode, node) {
+        
+        var boundDoneFn = Perry.onDataLoaded.bind(this, dataNode, node);
+        var boundFailFn = Perry.onDataError.bind(this, dataNode, node);
+        
+        $.ajax({
+            url: dataNode.url,
+            type: 'get',
+            async: true,
+            cache: false
+        })
+            .done(boundDoneFn)
+            .fail(boundFailFn);
+    }
+    
+    static onDataLoaded(dataNode, node, data) {
+        console.log("Perry: " + node.id + ": Succesfully loaded " + dataNode.url);
+        dataNode.loaded = true;
+        dataNode.data = data;
+        
+        Perry.attemptMerge(node);
+    }
+    
+    static onDataError(dataNode, node, response) {
+        console.warn("Perry: " + node.id + ": Failed to load " + dataNode.url + " with code " + response.status);
+    }
+    
+    
+    static attemptMerge(node) {
+        
+        if ((node.data.loaded) && (node.template.loaded)) {
+            console.log("Perry: " + node.id + " : Merge started");
+        } 
+        
+        
+    }
+    
 }
 
 // Boot Perry once the page has loaded
