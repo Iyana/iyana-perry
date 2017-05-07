@@ -13,6 +13,9 @@ module.exports = {
         modules: [
             __dirname + "/../web_modules",
             __dirname + "/../node_modules"
-        ]
+        ],
+        alias: {
+          'Handlebars': 'handlebars/dist/handlebars.js'
+        }
     }
 };

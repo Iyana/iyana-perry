@@ -23,13 +23,13 @@ limitations under the License.
     <body>
         <div>Perry Test File</div>
         
-        Error: <br/>
+        <h2>Error:</h2> 
         <div id="1" data-perry-template="foo.html" data-perry-data="goo.html">
             ... Loading ...
         </div>
         <br/>
 
-        Object: <br/>
+        <h2>Object: </h2>
         <div 
             id="2" 
             data-perry-template="../templates/hello-world.html" 
@@ -38,15 +38,23 @@ limitations under the License.
         </div>
         <br/>
 
-        Array: <br/>
+        <h2>Array: </h2>
         <div 
-            id="2" 
+            id="3" 
             data-perry-template="../templates/hello-world.html" 
             data-perry-data="../data/person-2.json">
             ... Loading ...
         </div>
         <br/>
 
+        <h2>Recursive </h2>
+        <div 
+            id="4" 
+            data-perry-template="../templates/recursive.html" >
+            ... Loading ...
+        </div>
+        <br/>
+        
         <script src="../js/Perry.js"></script>
     </body>
 </html>
