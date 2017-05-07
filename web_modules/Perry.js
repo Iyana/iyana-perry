@@ -35,7 +35,10 @@ class Perry {
             Perry.processNode($(this));
         });
 
-        //jqueryNode.find(perryTemplateTagSelector).each( Perry.processNode($(this)));
+        jqueryNode.filter(perryTemplateTagSelector).each( function(i) {
+            Perry.processNode($(this));
+        });
+        
     };
     
     static processNode(jqueryNode) {
@@ -52,7 +55,8 @@ class Perry {
             data: {
                 url: null,
                 loaded: false,
-                data: null
+                data: null,
+                required: true
             }
         };
 
@@ -66,9 +70,10 @@ class Perry {
         }
         console.log("Perry: " + perryNode.id + ": template: " + perryNode.template.url);
         
+        // data is not mandatory
         if (perryNode.data.url === undefined) {
-            console.warn("Perry: " + perryNode.id + ": data url is undefined. Node not processed.");
-            return;
+            console.log("Perry: " + perryNode.id + ": data url is undefined. Marking not required.");
+            perryNode.data.required = false;
         }
         console.log("Perry: " + perryNode.id + ": data: " + perryNode.data.url);
 
@@ -106,29 +111,45 @@ class Perry {
     
     
     static attemptMerge(node) {
+        // if template is not yet loaded dont do anything
+        if (!node.template.loaded) {
+            return;
+        }
         
-        if ((node.data.loaded) && (node.template.loaded)) {
-            console.log("Perry: " + node.id + " : Merge started");
-            
-            // compile the template
-            var compiledTemplate = Handlebars.compile(node.template.data);
-            var html = compiledTemplate(node.data.data);
-            
-            // convert into a set of DOM nodes
-            // Do not use $(html) directly as it cannot parse arbitrary html properly
-            var domNodes = $.parseHTML(html);
+        // if data is required and not yet loaded, dont do anything
+        if ((node.data.required) && (!(node.data.loaded))) {
+            return;
+        }
         
-            // if it is the body tag, change the inner html
-            // if it is anything else, replace it
-            if (node.jqueryNode.prop("tagName") === "BODY") {
-                node.jqueryNode.html(domNodes);
-            } else {
-                node.jqueryNode.replaceWith(domNodes);
-            }
-            
-        } 
-        
-        
+        console.log("Perry: " + node.id + " : Merge started");
+
+        // compile the template
+        var compiledTemplate = Handlebars.compile(node.template.data);
+        var html = compiledTemplate(node.data.data);
+
+        // convert into a set of DOM nodes
+        // Do not use $(html) directly as it cannot parse arbitrary html properly
+        var domNodes = $.parseHTML(html);
+
+        // if it is the body tag, change the inner html
+        // if it is anything else, replace it
+        if (node.jqueryNode.prop("tagName") === "BODY") {
+            node.jqueryNode.html(domNodes);
+        } else {
+            node.jqueryNode.replaceWith(domNodes);
+        }
+
+        // Support recursive templates
+        //
+        // At this stage, domNodes is inserted into the browser DOM, so
+        // modifying domNodes should result in modification of browser DOM too!
+
+        // First, prepare domNodes for JQuery
+        var jqueryNodes = $(domNodes);
+
+        // then process the child nodes in what was just created
+        Perry.processNodes(jqueryNodes);            
+
     }
     
 }
