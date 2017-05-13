@@ -91,7 +91,7 @@ class Perry {
             url: dataNode.url,
             type: 'get',
             async: true,
-            cache: false
+            cache: true
         })
             .done(boundDoneFn)
             .fail(boundFailFn);
@@ -125,8 +125,19 @@ class Perry {
 
         // compile the template
         var compiledTemplate = Handlebars.compile(node.template.data);
-        var html = compiledTemplate(node.data.data);
-
+        
+        // merge the template
+        var html = "";
+        if( Object.prototype.toString.call( node.data.data ) === '[object Array]' ) {
+            // merge as array
+            for (var i = 0; i < node.data.data.length; i++) {
+                html = html + compiledTemplate( node.data.data[i]);  
+            }
+        } else {
+            // merge as object
+            html = compiledTemplate(node.data.data);
+        }
+        
         // convert into a set of DOM nodes
         // Do not use $(html) directly as it cannot parse arbitrary html properly
         var domNodes = $.parseHTML(html);
