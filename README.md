@@ -112,7 +112,38 @@ In our Hello World example, switch to a different JSON ...
 ```
 
 ### Error handling
-When Perry is unable to load and merge a template, Perry quietly logs the error to the console.
+Perry provides three alternatives for handling errors that occour while processing templates.
+
+#### Global Error Div
+
+This approach is useful for pages that have multiple placeholders.
+
+Create a `<div>` that has a `data-perry-global-error-class` attribute. 
+
+When Perry loads, it looks for any `<div>` tags that have the `data-perry-global-error-class` attribute and hides them.
+
+Perry then goes on to process all the placeholders that it finds. If Perry encounters any errors, it
+- hides the placeholder
+- shows the global error `<div>`
+- adds the css class specified by the `data-perry-global-error-class` attribute to the `<div>`.
+
+#### Error Div
+
+A placeholder can contain a `<div>` that has a `data-perry-error-class` attribute. 
+
+When Perry loads, it looks for any `<div>` tags that have the `data-perry-error-class` attribute and hides them.
+
+If Perry encounters an error while processing a placeholder, it
+- hides the placeholder
+- shows the error `<div>`
+- adds the css class specified by the `data-global-error-class` attribute to the `<div>`.
+
+If a page contains a global error `<div>`, the local error `<divs>` will not be displayed.
+
+#### Do nothing
+
+Perry's default behaviour is to hide any placeholders that resulted in a processing error.
+
 
 ## License
 Perry is licensed under the Apache 2.0 license. It is free for commercial and non-commercial use. 

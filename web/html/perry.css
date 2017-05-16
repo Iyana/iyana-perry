@@ -1,0 +1,15 @@
+.perry-global-error {
+    border: 1px solid red;
+}
+
+.perry-error {
+    border: 1px solid red;
+}
+
+.blues {
+    background-color: lightblue;
+}
+
+.hidden {
+    display: none;
+}
