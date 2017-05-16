@@ -19,52 +19,22 @@ limitations under the License.
         <title>Perry test</title>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <link rel="stylesheet" type="text/css" href="perry.css">
     </head>
     <body>
         <div>Perry Test File</div>
         
-        <h2>Error without an error div:</h2> 
+        <div class="perry-global-error">
+            One or more of the Perry templates failed!
+        </div>
+        
+        <h2>Error 1:</h2> 
         <div id="1" data-perry-template="foo.html" data-perry-data="goo.html">
             ... Loading ...
         </div>
         <br/>
 
-        
-        <h2>Error with an error div:</h2> 
+        <h2>Error 2:</h2> 
         <div id="1" data-perry-template="foo.html" data-perry-data="goo.html">
-            ... Loading ...
-            
-            <div data-perry-error-class="perry-error" class="blues hidden">
-                Something went wrong with this placeholder.
-            </div>
-            
-        </div>
-        <br/>
-        
-        
-        <h2>Object: </h2>
-        <div 
-            id="2" 
-            data-perry-template="../templates/hello-world.html" 
-            data-perry-data="../data/person-1.json">
-            ... Loading ...
-        </div>
-        <br/>
-
-        <h2>Array: </h2>
-        <div 
-            id="3" 
-            data-perry-template="../templates/hello-world.html" 
-            data-perry-data="../data/person-2.json">
-            ... Loading ...
-        </div>
-        <br/>
-
-        <h2>Recursive </h2>
-        <div 
-            id="4" 
-            data-perry-template="../templates/recursive.html" >
             ... Loading ...
         </div>
         <br/>

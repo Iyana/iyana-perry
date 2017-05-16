@@ -24,9 +24,23 @@ class Perry {
     static dontDoMuch() {
         console.log("Perry: initialising");
         
+        // hide error divs
+        Perry.hideErrorDivs();
+        
         var bodySelector = $("body");
         Perry.processNodes(bodySelector);
     };
+    
+    static hideErrorDivs() {
+        // hide the global error div
+        $("[" + PerryGlobals.tags.perryGlobalErrorClassAttribute + "]")
+            .hide();
+        
+        // hide the local error divs
+        
+        $("[" + PerryGlobals.tags.perryErrorClassAttribute + "]")
+            .hide();
+    }
     
     static processNodes(jqueryNode) {
         var perryTemplateTagSelector = "[" + PerryGlobals.tags.perryTemplateAttribute + "]";
@@ -107,6 +121,46 @@ class Perry {
     
     static onDataError(dataNode, node, response) {
         console.warn("Perry: " + node.id + ": Failed to load " + dataNode.url + " with code " + response.status);
+        Perry.flagError(node);
+    }
+    
+    
+    static flagError(node) {
+        
+        // Is there a global error div that we can use ?
+        var globalErrorDiv = $("[" + PerryGlobals.tags.perryGlobalErrorClassAttribute + "]");
+        if (globalErrorDiv.length !== 0) {
+            
+            // show the global div
+            globalErrorDiv.show();
+            
+            // hide the node that has failed
+            node.jqueryNode.hide();
+    
+            // display the global error div
+            var globalErrorClass = globalErrorDiv.attr(PerryGlobals.tags.perryGlobalErrorClassAttribute);
+            globalErrorDiv.addClass( globalErrorClass );
+            
+            return;
+        }
+        
+        // Does the placeholder have an error div that can be displayed ?
+        var errorDiv = node.jqueryNode.find( "[" + PerryGlobals.tags.perryErrorClassAttribute + "]");
+        if (errorDiv.length !== 0) {
+            // replace the div with the error div
+            node.jqueryNode.replaceWith(errorDiv);
+            errorDiv.show();
+            
+            // set the div's class
+            var errorClass = errorDiv.attr( PerryGlobals.tags.perryErrorClassAttribute);
+            errorDiv.addClass( errorClass);
+            
+            return;
+        } 
+        
+        // Cannot flag the error - just hide the div
+        node.jqueryNode.hide();
+        
     }
     
     
