@@ -127,6 +127,23 @@ Perry then goes on to process all the placeholders that it finds. If Perry encou
 - shows the global error `<div>`
 - adds the css class specified by the `data-perry-global-error-class` attribute to the `<div>`.
 
+```
+    ...
+        <div data-perry-global-error-class="perry-global-error" class="hidden">
+            One or more of the Perry templates failed!
+        </div>
+    ...
+```
+
+Although Perry will hide the `<div>` when it loads, it is preferable to specify a `class` or `style` attribute so that the `<div>` is not rendered.
+
+This can be achieved by defining a class that has `display: none` as its style:
+```
+.hidden {
+    display: none;
+}
+```
+
 #### Error Div
 
 A placeholder can contain a `<div>` that has a `data-perry-error-class` attribute. 
@@ -139,6 +156,33 @@ If Perry encounters an error while processing a placeholder, it
 - adds the css class specified by the `data-global-error-class` attribute to the `<div>`.
 
 If a page contains a global error `<div>`, the local error `<divs>` will not be displayed.
+
+```
+    ...
+        <div data-perry-global-error-class="perry-global-error" class="hidden">
+            One or more of the Perry templates failed!
+        </div>
+    ...
+```
+
+Although Perry will hide the `<div>` when it loads, it is preferable to specify a `class` or `style` attribute so that the `<div>` is not rendered.
+
+This can be achieved by defining a class that has `display: none` as its style:
+```
+.hidden {
+    display: none;
+}
+```
+    ...
+        <div id="1" data-perry-template="foo.html" data-perry-data="bar.html">
+            ... Loading ...
+            
+            <div data-perry-error-class="perry-error" class="hidden">
+                Something went wrong with this placeholder.
+            </div>
+            
+        </div>
+```
 
 #### Do nothing
 
